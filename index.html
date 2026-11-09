@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desigualdad y Pobreza en Guatemala · Plataforma Interactiva</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5fa',
+                            100: '#e1ecf5',
+                            500: '#1b4b72',
+                            700: '#153a5b',
+                            800: '#112f49',
+                            900: '#0b1f31',
+                        },
+                        accent: {
+                            emerald: '#059669',
+                            amber: '#d97706',
+                            rose: '#e11d48',
+                            cyan: '#0891b2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar and smooth transitions */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); }
+        .tab-btn.active { border-color: #1b4b72; color: #1b4b72; font-weight: 700; background-color: #f0f5fa; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header & Navigation -->
+    <header class="bg-brand-900 text-white shadow-lg sticky top-0 z-50 border-b border-brand-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center text-brand-900 font-black text-xl shadow">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight text-white leading-tight">Fundamentos Económicos</h1>
+                        <p class="text-xs text-cyan-200">Desigualdad y Pobreza en Guatemala · Módulo 3</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="flex space-x-1 sm:space-x-2 text-sm font-medium">
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="tab-btn px-3 py-2 rounded-lg transition-all flex items-center space-x-2 text-slate-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-circle-question"></i>
+                        <span class="hidden md:inline">Evaluación (75+ Q)</span>
+                    </button>
+                    <button onclick="switchTab('simulators')" id="nav-simulators" class="tab-btn px-3 py-2 rounded-lg transition-all flex items-center space-x-2 text-slate-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span class="hidden md:inline">Laboratorio & Simuladores</span>
+                    </button>
+                    <button onclick="switchTab('theory')" id="nav-theory" class="tab-btn px-3 py-2 rounded-lg transition-all flex items-center space-x-2 text-slate-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span class="hidden md:inline">Síntesis Teórica</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: QUIZ / BANCO DE 75+ PREGUNTAS       -->
+        <!-- ========================================== -->
+        <section id="tab-quiz" class="space-y-6">
+            <!-- Controls bar -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-black text-brand-900 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-cyan-600"></i> Banco Integral de Reactivos de Aprendizaje
+                        </h2>
+                        <p class="text-sm text-slate-600">Preguntas de nivel intermedio y avanzado basadas en datos ENEIC 2026, ENCOVI 2023, Theil y NBI.</p>
+                    </div>
+
+                    <!-- Filters and Mode -->
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <select id="filter-module" onchange="applyQuizFilter()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs sm:text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 p-2.5">
+                            <option value="all">Todos los Módulos (77 Preguntas)</option>
+                            <option value="1">Módulo 1: Desigualdades Múltiples</option>
+                            <option value="2">Módulo 2: Índice de Theil y Gini</option>
+                            <option value="3">Módulo 3: Ingreso de Hogares (ENEIC)</option>
+                            <option value="4">Módulo 4: IPM-Gt (ENCOVI 2023)</option>
+                            <option value="5">Módulo 5: Necesidades Básicas (NBI)</option>
+                        </select>
+
+                        <button onclick="startPracticeMode()" class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-brand-700 text-white hover:bg-brand-800 transition shadow">
+                            <i class="fa-solid fa-list-check mr-1.5"></i> Ver Todas
+                        </button>
+                        <button onclick="startExamMode(20)" class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition shadow">
+                            <i class="fa-solid fa-bolt mr-1.5"></i> Test Rápido (20 Q)
+                        </button>
+                        <button onclick="resetQuizState()" title="Reiniciar progreso" class="p-2.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Performance bar -->
+                <div class="mt-5 pt-4 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100">
+                        <span class="text-xs font-medium text-slate-500 block">Respondidas</span>
+                        <span id="stat-answered" class="text-lg font-bold text-slate-800">0 / 0</span>
+                    </div>
+                    <div class="bg-emerald-50 rounded-xl p-2.5 border border-emerald-100">
+                        <span class="text-xs font-medium text-emerald-700 block">Aciertos</span>
+                        <span id="stat-correct" class="text-lg font-bold text-emerald-700">0</span>
+                    </div>
+                    <div class="bg-rose-50 rounded-xl p-2.5 border border-rose-100">
+                        <span class="text-xs font-medium text-rose-700 block">Errores</span>
+                        <span id="stat-incorrect" class="text-lg font-bold text-rose-700">0</span>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-2.5 border border-blue-100">
+                        <span class="text-xs font-medium text-brand-700 block">Precisión</span>
+                        <span id="stat-precision" class="text-lg font-bold text-brand-700">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <div id="questions-list" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Summary Modal / End Panel -->
+            <div id="exam-summary" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-slate-200 text-center space-y-4">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-800">¡Evaluación Finalizada!</h3>
+                <p id="summary-text" class="text-slate-600 text-sm max-w-md mx-auto"></p>
+                <div class="pt-2">
+                    <button onclick="startPracticeMode()" class="px-5 py-2.5 bg-brand-800 hover:bg-brand-900 text-white font-medium rounded-xl shadow">
+                        Revisar todas las preguntas y respuestas
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 2: SIMULADORES Y CALCULADORAS          -->
+        <!-- ========================================== -->
+        <section id="tab-simulators" class="hidden space-y-8">
+
+            <!-- Simulator 1: Theil & Parcelas de Riego -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-full">Simulador Cuantitativo 1</span>
+                    <h3 class="text-xl font-bold text-brand-900 mt-2">Calculadora del Índice de Theil y la Analogía del Riego</h3>
+                    <p class="text-sm text-slate-600">Compruebe cómo el logaritmo de la razón respecto a la parte justa ($s_i / (1/N)$) genera el índice de Theil y cómo se interpreta en "parcelas mojadas" con $\text{EXP}(-Theil)$.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Inputs -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-semibold text-slate-700">Seleccione el escenario didáctico:</label>
+                            <select id="theil-preset" onchange="loadTheilPreset()" class="text-xs bg-slate-50 border border-slate-300 rounded p-1.5">
+                                <option value="diapo">Presentación (500, 1000, 1500, 5000)</option>
+                                <option value="bimodal">Aldea 2 Bimodal (300, 300, 3500, 3900)</option>
+                                <option value="perfect">Igualdad Total (2000, 2000, 2000, 2000)</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div class="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-500 uppercase">
+                                <span>Persona / Parcela</span>
+                                <span>Ingreso / Litros (Q)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-600 w-24">Persona A:</span>
+                                <input type="number" id="th-val-1" value="500" class="theil-input w-full p-2 text-sm border rounded-lg bg-white" oninput="calculateTheilLive()">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-600 w-24">Persona B:</span>
+                                <input type="number" id="th-val-2" value="1000" class="theil-input w-full p-2 text-sm border rounded-lg bg-white" oninput="calculateTheilLive()">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-600 w-24">Persona C:</span>
+                                <input type="number" id="th-val-3" value="1500" class="theil-input w-full p-2 text-sm border rounded-lg bg-white" oninput="calculateTheilLive()">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-slate-600 w-24">Persona D:</span>
+                                <input type="number" id="th-val-4" value="5000" class="theil-input w-full p-2 text-sm border rounded-lg bg-white" oninput="calculateTheilLive()">
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border-l-4 border-brand-500 p-3 rounded-r-lg text-xs text-brand-900 leading-relaxed">
+                            <strong>Fórmula aplicada:</strong> $T = \sum s_i \times \ln(s_i / (1/N))$. Donde la parte justa es $1/4 = 25\%$. El valor máximo con 4 personas es $\ln(4) = 1.386$.
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Output Table -->
+                    <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-2.5">Sujeto</th>
+                                        <th class="p-2.5">Ingreso ($y_i$)</th>
+                                        <th class="p-2.5">Cuota ($s_i$)</th>
+                                        <th class="p-2.5">Razón ($s_i / 0.25$)</th>
+                                        <th class="p-2.5">$\ln(\text{razón})$</th>
+                                        <th class="p-2.5 font-bold text-brand-900">$s_i \times \ln$</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="theil-table-body" class="divide-y divide-slate-100 bg-white">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Results Dashboard -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bg-slate-900 text-white p-3.5 rounded-xl text-center">
+                                <span class="text-[11px] text-slate-400 block font-medium uppercase">Índice Theil ($T$)</span>
+                                <span id="theil-result-val" class="text-2xl font-black text-cyan-400">0.345</span>
+                            </div>
+                            <div class="bg-emerald-800 text-white p-3.5 rounded-xl text-center">
+                                <span class="text-[11px] text-emerald-200 block font-medium uppercase">Equivalente de Riego</span>
+                                <span id="theil-irrigation-val" class="text-2xl font-black text-emerald-300">71 %</span>
+                                <span class="text-[10px] text-emerald-200 block">71 de 100 parcelas mojadas</span>
+                            </div>
+                            <div class="bg-indigo-900 text-white p-3.5 rounded-xl text-center">
+                                <span class="text-[11px] text-indigo-300 block font-medium uppercase">Desigualdad Máx. (%)</span>
+                                <span id="theil-pct-max" class="text-2xl font-black text-indigo-200">24.9%</span>
+                                <span class="text-[10px] text-indigo-300 block">de $\ln(4)=1.386$</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator 2: Alkire-Foster IPM-Gt (ENCOVI 2023) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">Simulador Oficial 2</span>
+                    <h3 class="text-xl font-bold text-brand-900 mt-2">Diagnóstico de Pobreza Multidimensional IPM-Gt (ENCOVI 2023)</h3>
+                    <p class="text-sm text-slate-600">Metodología Alkire-Foster: 5 dimensiones (20% de peso cada una), 17 indicadores. Umbral de corte de pobreza: $k \ge 30\%$.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Checkboxes of indicators -->
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex items-center justify-between pb-2">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Marque las privaciones observadas en el hogar:</span>
+                            <button onclick="resetIPMCheckboxes()" class="text-xs text-brand-700 font-semibold hover:underline">Desmarcar todo</button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Dim 1: Salud -->
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                                <h4 class="text-xs font-bold text-brand-800 uppercase flex items-center justify-between">
+                                    <span><i class="fa-solid fa-heart-pulse text-rose-500 mr-1.5"></i> 1. Salud y Seg. Alimentaria (20%)</span>
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700">4 ind. / 5% c/u</span>
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2.5 text-xs text-slate-700">
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Acceso a servicios de salud (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Inseguridad alimentaria ELCSA (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Embarazo adolescente &lt;20 años (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Cuidado prenatal &lt;4 controles (5%)</label>
+                                </div>
+                            </div>
+
+                            <!-- Dim 2: Educacion -->
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                                <h4 class="text-xs font-bold text-brand-800 uppercase flex items-center justify-between">
+                                    <span><i class="fa-solid fa-book text-blue-500 mr-1.5"></i> 2. Educación (20%)</span>
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700">4 ind. / 5% c/u</span>
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2.5 text-xs text-slate-700">
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Asistencia escolar (7 a 17 años) (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Años de escolaridad en adultos (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Rezago escolar &gt;2 años (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Cuidado infantil inadecuado &lt;2 años (5%)</label>
+                                </div>
+                            </div>
+
+                            <!-- Dim 3: Empleo -->
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                                <h4 class="text-xs font-bold text-brand-800 uppercase flex items-center justify-between">
+                                    <span><i class="fa-solid fa-briefcase text-amber-500 mr-1.5"></i> 3. Empleo Digno (20%)</span>
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700">2 ind. / 10% c/u</span>
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2.5 text-xs text-slate-700">
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="10" onchange="calcIPMLive()"> Empleo informal (10%) <span class="text-amber-700 font-bold">[19.3% contribución]</span></label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="10" onchange="calcIPMLive()"> Trabajo infantil (&le;15 años) (10%)</label>
+                                </div>
+                            </div>
+
+                            <!-- Dim 4: Vivienda -->
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                                <h4 class="text-xs font-bold text-brand-800 uppercase flex items-center justify-between">
+                                    <span><i class="fa-solid fa-house text-emerald-500 mr-1.5"></i> 4. Vivienda (20%)</span>
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700">3 ind. / 6.66% c/u</span>
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2.5 text-xs text-slate-700">
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="6.666" onchange="calcIPMLive()"> Materiales precarios (6.67%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="6.666" onchange="calcIPMLive()"> Hacinamiento &gt;3 p/c (6.67%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="6.666" onchange="calcIPMLive()"> Leña sin chimenea (6.67%)</label>
+                                </div>
+                            </div>
+
+                            <!-- Dim 5: Servicios Basicos -->
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50">
+                                <h4 class="text-xs font-bold text-brand-800 uppercase flex items-center justify-between">
+                                    <span><i class="fa-solid fa-faucet-drip text-cyan-500 mr-1.5"></i> 5. Servicios Básicos (20%)</span>
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-700">4 ind. / 5% c/u</span>
+                                </h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2.5 text-xs text-slate-700">
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Acceso inadecuado a agua (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Sin recolección de basura (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Sin energía eléctrica regular (5%)</label>
+                                    <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="ipm-check mt-0.5" data-weight="5" onchange="calcIPMLive()"> Saneamiento no mejorado (5%)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Panel -->
+                    <div class="lg:col-span-4 flex flex-col justify-center space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center">
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Puntaje de Privación ($c$)</span>
+                            <div id="ipm-score" class="text-5xl font-black text-brand-900 my-2">0.0%</div>
+                            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                                <div id="ipm-bar" class="bg-brand-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-slate-500 mt-1">
+                                <span>0%</span>
+                                <span class="font-bold text-rose-600">Umbral $k = 30\%$</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+
+                        <div id="ipm-status-box" class="p-4 rounded-xl bg-slate-200 text-slate-700 font-bold text-sm">
+                            Hogar No Pobre Multidimensional
+                        </div>
+
+                        <div class="text-left text-xs text-slate-600 space-y-1.5 pt-2 border-t border-slate-200">
+                            <p><strong>Criterio oficial:</strong> Si $c \ge 30\%$ (equivalente a 1.5 dimensiones enteras insatisfechas), el hogar y todos sus miembros se consideran en <em>Pobreza Multidimensional</em>.</p>
+                            <p><strong>Dato Nacional 2023:</strong> Incidencia $H = 57.7\%$, Intensidad $A = 45.1\%$, Índice $M_0 = 0.260$.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator 3: Semáforo NBI -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full">Simulador Estructural 3</span>
+                    <h3 class="text-xl font-bold text-brand-900 mt-2">Semáforo de Necesidades Básicas Insatisfechas (NBI)</h3>
+                    <p class="text-sm text-slate-600">Evalúe un hogar con los 6 indicadores del método NBI de CEPAL / Censos Nacionales.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- NBI 1 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">1. Calidad de Vivienda</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">Piso de tierra, paredes de bajareque/lepa/caña, techo precario (383k hogares).</p>
+                    </div>
+
+                    <!-- NBI 2 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">2. Hacinamiento Crítico</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">Más de 3 personas por cuarto habitable o dormitorio (699k hogares).</p>
+                    </div>
+
+                    <!-- NBI 3 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">3. Abastecimiento de Agua</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">Sin tubería en vivienda ni predio; acarreo de río, pozo o camión (170 mun. empeoraron).</p>
+                    </div>
+
+                    <!-- NBI 4 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">4. Servicio Sanitario</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">Ausencia de inodoro o letrina funcional; evacuación al aire libre (556k hogares).</p>
+                    </div>
+
+                    <!-- NBI 5 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">5. Educación Primaria</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">Al menos un menor de 7 a 14 años fuera del sistema educativo escolar (solo 2.8% en Guatemala).</p>
+                    </div>
+
+                    <!-- NBI 6 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-slate-800">6. Capacidad de Subsistencia</span>
+                            <input type="checkbox" class="nbi-toggle w-5 h-5 accent-rose-600" onchange="calcNBILive()">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1.5">&gt;3 dependientes por ocupado y jefe de hogar con menos de primaria completa (210k hogares).</p>
+                    </div>
+                </div>
+
+                <!-- NBI Result Banner -->
+                <div id="nbi-result-banner" class="mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div id="nbi-icon-indicator" class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 id="nbi-status-title" class="font-black text-emerald-900 text-lg">Hogar No Pobre Estructural</h4>
+                            <p id="nbi-status-desc" class="text-xs text-emerald-700">0 de 6 necesidades insatisfechas detectadas.</p>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-500 text-right">
+                        <span>Guatemala 2018: <strong>45.3%</strong> de familias sufren al menos 1 NBI.</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: SÍNTESIS TEÓRICA                    -->
+        <!-- ========================================== -->
+        <section id="tab-theory" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black text-brand-900">Compendio Teórico y Evidencia Empírica de Guatemala</h2>
+                    <p class="text-sm text-slate-600">Material de referencia estructurado a partir de las sesiones del Módulo 3 (Prof. W. Romero).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tarjeta 1 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold uppercase text-brand-700">Módulo 1</span>
+                        <h4 class="font-bold text-slate-800">Desigualdades Múltiples (Interseccionalidad)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            No es $1+1=2$. Cuando se cruzan el género, la etnia, la clase y el territorio, el costo crece más rápido que la suma individual de discriminaciones. En Guatemala, el menor ingreso laboral lo percibe la <strong>mujer indígena en el área rural</strong>. 
+                        </p>
+                        <p class="text-xs text-slate-600">Factores explicativos: <em>político</em> (poder y decisiones), <em>económico</em> (explotación/mayor utilidad del trabajo) e <em>ideológico</em> (creencia de superioridad).</p>
+                    </div>
+
+                    <!-- Tarjeta 2 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold uppercase text-brand-700">Módulo 2</span>
+                        <h4 class="font-bold text-slate-800">Índice de Theil y Descomposición Aditiva</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A diferencia del Gini, Theil se descompone exactamente en: <strong>Theil Total = Theil Dentro + Theil Entre</strong>.
+                            En Guatemala (ENEIC I-2026, Theil=0.405), el <strong>84.7% (0.343)</strong> se produce DENTRO de los dominios (entre vecinos), y apenas el <strong>15.3% (0.062)</strong> se debe a la brecha ENTRE ciudad y campo.
+                        </p>
+                        <p class="text-xs text-slate-600">Analogía: $\exp(-Theil)$ simula parcelas irrigadas parejamente. Theil nacional 0.405 equivale a mojar 67 de 100 parcelas.</p>
+                    </div>
+
+                    <!-- Tarjeta 3 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold uppercase text-brand-700">Módulo 3</span>
+                        <h4 class="font-bold text-slate-800">Ingreso de Hogares y Razón de Palma</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Con la ENEIC I-2026, el ingreso promedio del ocupado es Q2,797 (mediana Q2,400). El ingreso total del hogar añade a B1 los complementos B2, 2do empleo B3, rentas/pensiones B4 y remesas B5 (+37.2%).
+                        </p>
+                        <p class="text-xs text-slate-600">
+                            <strong>Razón de Palma = 2.86:</strong> El 10% más rico (decil 10, 34.5% del ingreso) se lleva 2.86 veces más que todo el 40% más pobre junto (deciles 1-4, 12.1%). Gini nacional de ingreso = 0.475 (frente al Gini de consumo ENCOVI de 0.421).
+                        </p>
+                    </div>
+
+                    <!-- Tarjeta 4 -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold uppercase text-brand-700">Módulos 4 y 5</span>
+                        <h4 class="font-bold text-slate-800">IPM-Gt (ENCOVI 2023) y NBI Censal</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <strong>IPM-Gt 2023:</strong> Incidencia $H=57.7\%$, Intensidad $A=45.1\%$, $M_0=0.260$. Mayor contribución: <em>Empleo informal</em> (19.3%). Brecha étnica: población Maya 75.6% vs Ladina 46.1%.
+                        </p>
+                        <p class="text-xs text-slate-600">
+                            <strong>NBI:</strong> 45.3% nacional. Mayor éxito educativo (solo 2.8% sin primaria). Paradoja de Totonicapán: área urbana 75% NBI vs 47% rural por rápida urbanización sin red de servicios básicos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Universidad Rafael Landívar · Facultad de Ciencias Económicas y Empresariales · Fundamentos Económicos para el Desarrollo Integral</p>
+            <p class="mt-1 text-slate-400">Herramienta Pedagógica Interactiva basada en investigaciones de W. Romero, INE (ENEIC I-2026, ENCOVI 2023) y CEPAL.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT APPLICATION LOGIC & QUESTION BANK -->
+    <script>
+        // TAB MANAGEMENT
+        function switchTab(tabId) {
+            document.getElementById('tab-quiz').classList.add('hidden');
+            document.getElementById('tab-simulators').classList.add('hidden');
+            document.getElementById('tab-theory').classList.add('hidden');
+            
+            document.getElementById('nav-quiz').classList.remove('active');
+            document.getElementById('nav-simulators').classList.remove('active');
+            document.getElementById('nav-theory').classList.remove('active');
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
+
+        // =========================================================================
+        // BANCO DE PREGUNTAS (EXHAUSTIVO: 77 PREGUNTAS CON JUSTIFICACIÓN COMPLETA)
+        // =========================================================================
+        const questionBank = [
+            // --- MÓDULO 1: DESIGUALDADES MÚLTIPLES (1-16) ---
+            {
+                id: 1,
+                module: 1,
+                text: "Según los datos de ingresos y empleo en Guatemala presentados en clase, ¿cuál de los siguientes perfiles sociodemográficos percibe en promedio el menor ingreso laboral?",
+                options: [
+                    "Hombre indígena del área rural",
+                    "Mujer no indígena (ladina/mestiza) del área rural",
+                    "Mujer indígena del área rural",
+                    "Hombre indígena del área urbana"
+                ],
+                correct: 2,
+                explanation: "La evidencia empírica de Romero (ENEI/INE) demuestra que la mujer indígena rural acumula las desventajas de género, étnica y territorial, ubicándose en el escalón más bajo de ingresos promedio del país."
+            },
+            {
+                id: 2,
+                module: 1,
+                text: "En el marco de la teoría de las desigualdades múltiples (interseccionalidad), cuando una persona acumula desventajas por etnia, género y territorio, el efecto acumulado:",
+                options: [
+                    "Equivale exactamente a la suma aritmética (1 + 1 = 2)",
+                    "Es menor que la suma porque una desigualdad neutraliza a la otra",
+                    "Pesa más que la simple suma aritmética de cada desventaja aislada",
+                    "Depende exclusivamente de su nivel de educación formal y no de su identidad"
+                ],
+                correct: 2,
+                explanation: "La tesis central de Romero señala que cada escalón adicional suma discriminaciones y el costo social y económico crece de forma más que proporcional ('no es 1 + 1 = 2')."
+            },
+            {
+                id: 3,
+                module: 1,
+                text: "¿Cuáles son los tres factores estructurales identificados por Romero que operan simultáneamente para reproducir las desigualdades múltiples en Guatemala?",
+                options: [
+                    "Geográfico, demográfico y climatológico",
+                    "Político (relaciones de poder), económico (utilidad del trabajo ajeno) e ideológico (creencia de superioridad)",
+                    "Fiscal, monetario y de comercio exterior",
+                    "Biológico, religioso y tecnológico"
+                ],
+                correct: 1,
+                explanation: "Las diapositivas definen: Factor político (quién decide y quién no), Factor económico (incentivo de obtener mayor utilidad del trabajo del otro) y Factor ideológico (la idea de superioridad de unos sobre otros)."
+            },
+            {
+                id: 4,
+                module: 1,
+                text: "De acuerdo con el informe de la OIT (2003) expuesto en la sesión, ¿cómo funciona el círculo vicioso que consolida la 'trampa de la pobreza'?",
+                options: [
+                    "La inflación causa desempleo, lo cual reduce el consumo y desincentiva la inversión privada",
+                    "Los estereotipos y prejuicios causan discriminación; esta genera desigualdad socioeconómica, y la desigualdad refuerza los estereotipos",
+                    "El cambio climático reduce las cosechas, lo que disminuye las exportaciones agrícolas",
+                    "La falta de títulos de propiedad impide acceder al crédito bancario formal"
+                ],
+                correct: 1,
+                explanation: "El círculo vicioso de la OIT muestra que: Actitudes individuales y prácticas institucionales (estereotipos) → Discriminación → Desigualdades socioeconómicas → Refuerzo de estereotipos."
+            },
+            {
+                id: 5,
+                module: 1,
+                text: "¿Qué reveló el mapa de conglomerados bivariado (cluster espacial) entre población indígena y pobreza en los estudios de SEGEPLAN/URL?",
+                options: [
+                    "Que no existe correlación espacial entre el porcentaje indígena y el nivel de pobreza municipal",
+                    "Una franja continua en el centro-norte y noroccidente donde coinciden alta concentración indígena y alta incidencia de pobreza",
+                    "Que la mayor pobreza indígena se concentra exclusivamente en las costas del Pacífico",
+                    "Que los municipios con mayor población indígena tienen menor pobreza multidimensional"
+                ],
+                correct: 1,
+                explanation: "El mapa de cluster bivariado muestra un agrupamiento 'Alto-Alto' continuo en el centro-norte y altiplano occidental del país, evidenciando que el territorio y la etnia se refuerzan."
+            },
+            {
+                id: 6,
+                module: 1,
+                text: "¿Por qué el Censo 2018 reportó 43.7% de población indígena bajo autoidentificación pero solo 27% bajo el criterio de idioma materno?",
+                options: [
+                    "Por un sesgo de error de captura en las tabletas digitales del INE",
+                    "Porque la forma de preguntar no es neutral: el idioma materno refleja pérdida lingüística intergeneracional, mientras que la autoidentificación capta pertenencia cultural",
+                    "Porque solo se entrevistó a hombres en edad laboral activa",
+                    "Porque la población indígena migró masivamente al extranjero entre 2002 y 2018"
+                ],
+                correct: 1,
+                explanation: "La medición de la etnia depende fuertemente de la variable: la asimilación y discriminación histórica redujeron el uso de idiomas mayas como lengua materna, pero la autoadscripción reconoce la identidad ancestral."
+            },
+            {
+                id: 7,
+                module: 1,
+                text: "Según el análisis histórico de la primera sesión, ¿qué ilustra la distancia entre el Art. 1 de la Declaración Universal de DDHH y la realidad guatemalteca?",
+                options: [
+                    "Que la legislación internacional no aplica a repúblicas soberanas de Centroamérica",
+                    "Que ser 'iguales ante la ley' no elimina automáticamente la exclusión heredada históricamente desde la colonia y el trabajo forzado",
+                    "Que las leyes tributarias son las únicas determinantes del ingreso real",
+                    "Que la discriminación desapareció legalmente tras las reformas de 1871"
+                ],
+                correct: 1,
+                explanation: "El documento enfatiza: 'Iguales en la ley, desiguales en la vida'; las normas jurídicas proclaman igualdad, pero las estructuras históricas reproducen la desigualdad material."
+            },
+            {
+                id: 8,
+                module: 1,
+                text: "En la definición de Marta Casaús (2002) citada en clase, ¿qué define esencialmente al racismo?",
+                options: [
+                    "Cualquier política aduanera con aranceles diferenciados hacia países vecinos",
+                    "Valorar como definitivas ciertas diferencias biológicas o culturales (reales o imaginarias) para justificar el dominio o sumisión sobre el otro",
+                    "La competencia por salarios dentro de un mercado informal de trabajo",
+                    "Una opinión desfavorable no fundamentada en datos de censos"
+                ],
+                correct: 1,
+                explanation: "Casaús lo define como la naturalización o absolutización de diferencias biológicas o culturales para legitimar y justificar relaciones asimétricas de poder y dominio."
+            },
+            {
+                id: 9,
+                module: 1,
+                text: "La Meta 4 del Plan Nacional de Desarrollo 'K'atun: Nuestra Guatemala 2032' compromete al Estado específicamente a:",
+                options: [
+                    "Eliminar completamente el cobro del Impuesto al Valor Agregado para 2030",
+                    "Garantizar la gobernabilidad y estabilidad social reduciendo sustancialmente la exclusión, el racismo y la discriminación",
+                    "Industrializar el 100% de los municipios clasificados en extrema pobreza",
+                    "Sustituir el índice de Gini por el índice de Theil en los censos del INE"
+                ],
+                correct: 1,
+                explanation: "El Plan K'atun 2032 (meta 4) fija explícitamente el compromiso del Estado de erradicar la exclusión estructural, el racismo y la discriminación racial."
+            },
+            {
+                id: 10,
+                module: 1,
+                text: "¿Quién fue el pionero a nivel mundial en el levantamiento de mapas de pobreza para la focalización social, citado como referente histórico de SEGEPLAN?",
+                options: [
+                    "Amartya Sen en Calcuta (1981)",
+                    "Charles Booth en Londres (1889-1891)",
+                    "Henri Theil en Ámsterdam (1967)",
+                    "Corrado Gini en Roma (1912)"
+                ],
+                correct: 1,
+                explanation: "Charles Booth cartografió Londres calle por calle por niveles socioeconómicos entre 1889 y 1891 para fundamentar las pensiones de vejez."
+            },
+            {
+                id: 11,
+                module: 1,
+                text: "Al observar los mapas de pobreza general de Guatemala de 1999, 2002, 2006 y 2023, la conclusión geográfica más contundente es:",
+                options: [
+                    "La pobreza se trasladó completamente hacia la Costa Sur y el Puerto San José",
+                    "En más de 20 años el mapa apenas cambió: la pobreza se reproduce en los mismos territorios del noroccidente y muestra deterioro en el suroriente",
+                    "Guatemala erradicó la pobreza en 15 de sus 22 departamentos",
+                    "La pobreza se volvió un fenómeno exclusivamente metropolitano"
+                ],
+                correct: 1,
+                explanation: "La persistencia territorial demuestra la 'trampa espacial de la pobreza': los mismos municipios rezagados hace dos décadas continúan en los estratos más críticos."
+            },
+            {
+                id: 12,
+                module: 1,
+                text: "¿Por qué un diagnóstico de mercado o de proyecto ambiental basado en el 'habitante promedio' de un municipio resulta metodológicamente deficiente?",
+                options: [
+                    "Porque los censos de población son encuestas sin validez probabilística",
+                    "Porque dentro de un mismo territorio las capacidades de pago y privaciones difieren radicalmente según género, etnia e idioma",
+                    "Porque el promedio municipal siempre es idéntico a la mediana nacional",
+                    "Porque las leyes guatemaltecas prohíben diseñar proyectos comunitarios locales"
+                ],
+                correct: 1,
+                explanation: "El promedio encubre las disparidades internas: un diseño para el usuario promedio ignora a las personas con acumulación de desventajas (como mujeres indígenas rurales)."
+            },
+            {
+                id: 13,
+                module: 1,
+                text: "¿Qué instrumento internacional contra la discriminación ratificado por Guatemala establece que cualquier distinción basada en el origen anula el ejercicio de derechos?",
+                options: [
+                    "El Protocolo de Kioto sobre Cambio Climático",
+                    "La Convención Internacional sobre la Eliminación de todas las Formas de Discriminación Racial (1965)",
+                    "El Tratado de Libre Comercio con Estados Unidos",
+                    "El Consenso de Washington de 1989"
+                ],
+                correct: 1,
+                explanation: "La Convención de la ONU de 1965 es el instrumento jurídico fundamental que prohíbe toda forma de segregación, distinción o anulación de derechos por linaje u origen."
+            },
+            {
+                id: 14,
+                module: 1,
+                text: "Si un proyecto ambiental diseña talleres de conservación de fuentes de agua solo en español en el departamento de Alta Verapaz, ¿qué barrera interseccional está ignorando?",
+                options: [
+                    "La pertinencia cultural y lingüística de las mujeres indígenas que recolectan el recurso",
+                    "El precio internacional del barril de petróleo",
+                    "La ley de oferta y demanda del mercado mayorista",
+                    "El índice de Gini municipal de consumo privado"
+                ],
+                correct: 0,
+                explanation: "El enfoque de género y pertinencia cultural subraya que quienes gestionan el acarreo del agua son mayoritariamente mujeres indígenas mayahablantes."
+            },
+            {
+                id: 15,
+                module: 1,
+                text: "¿Qué ocurre con la brecha de ingresos salariales en el área urbana frente al área rural en Guatemala según la ENEI 2021?",
+                options: [
+                    "Los salarios rurales son superiores debido a la productividad agrícola exportadora",
+                    "En cada grupo étnico y de género, quien vive en el área rural percibe significativamente menos que quien vive en la urbana",
+                    "La brecha rural-urbana desapareció para los trabajadores por cuenta propia",
+                    "Los salarios son estadísticamente indistinguibles entre ambas áreas"
+                ],
+                correct: 1,
+                explanation: "Tanto para hombres como para mujeres, y para mayas como para mestizos, los ingresos laborales en el área rural son marcadamente inferiores a los del área urbana."
+            },
+            {
+                id: 16,
+                module: 1,
+                text: "¿Cuál es la relación conceptual entre racismo, discriminación y desigualdad social planteada en la sesión 21?",
+                options: [
+                    "El racismo es el resultado final, la discriminación es la ideología y la desigualdad la ley",
+                    "El racismo es la idea/justificación; la discriminación es el acto o práctica; la desigualdad social es el resultado estructural acumulado",
+                    "Son tres sinónimos exactos e intercambiables en sociología económica",
+                    "La desigualdad social causa el racismo, pero no existe discriminación institucional"
+                ],
+                correct: 1,
+                explanation: "La secuencia causal presentada es clara: Idea matriz (racismo) → Acción concreta (discriminación) → Consecuencia acumulativa objetiva (desigualdad social)."
+            },
+
+            // --- MÓDULO 2: ÍNDICE DE THEIL Y GINI (17-32) ---
+            {
+                id: 17,
+                module: 2,
+                text: "¿Cuál es la principal ventaja matemática y analítica del Índice de Theil frente al Coeficiente de Gini para el estudio territorial de la desigualdad?",
+                options: [
+                    "Que su valor nunca excede a 1.0 en ninguna circunstancia",
+                    "Que se puede descomponer aditivamente de manera exacta en desigualdad 'dentro de los grupos' y 'entre grupos'",
+                    "Que solo requiere datos de consumo y no de ingreso monetario",
+                    "Que no utiliza logaritmos en su formulación matemática"
+                ],
+                correct: 1,
+                explanation: "La descomposición aditiva perfecta ($T = T_{\\text{dentro}} + T_{\\text{entre}}$) permite identificar con precisión si el problema radica en las brechas entre regiones o en la inequidad entre vecinos."
+            },
+            {
+                id: 18,
+                module: 2,
+                text: "En una analogía de riego donde 10,000 litros se distribuyen entre 10 parcelas, ¿qué valor adopta el índice de Theil si cada una recibe exactamente 1,000 litros?",
+                options: [
+                    "0.475",
+                    "1.000",
+                    "0",
+                    "2.303"
+                ],
+                correct: 2,
+                explanation: "En una situación de igualdad perfecta (reparto parejo), la distancia relativa de cada sujeto respecto a su cuota justa es 0, por lo que Theil = 0."
+            },
+            {
+                id: 19,
+                module: 2,
+                text: "¿Cuál es el valor máximo teórico que puede alcanzar el índice de Theil en una economía con N personas cuando una sola se apropia de todo el ingreso?",
+                options: [
+                    "1.000",
+                    "ln(N)",
+                    "N / 2",
+                    "Infinito siempre, sin importar la población"
+                ],
+                correct: 1,
+                explanation: "A diferencia del Gini cuyo techo es 1.0, el límite superior del Theil es $\\ln(N)$. Para 4 personas es $\\ln(4) \\approx 1.386$; para 18.2 millones de guatemaltecos sería $\\approx 16.7$."
+            },
+            {
+                id: 20,
+                module: 2,
+                text: "Si el índice de Theil de un país es $T = 0.405$, ¿cómo se traduce este resultado en la analogía de parcelas de riego mediante la expresión $\\text{EXP}(-T)$?",
+                options: [
+                    "Significa que se riegan 40 de cada 100 parcelas",
+                    "Equivale a un riego que moja 67 de cada 100 parcelas (dejando 33 totalmente secas)",
+                    "Significa que el 85% de las parcelas están anegadas",
+                    "Equivale a un sistema con cero pérdidas de agua"
+                ],
+                correct: 1,
+                explanation: "$\\text{EXP}(-0.405) = 0.667 \\approx 67\\%$. La analogía pedagógica muestra que el ingreso nacional está tan mal distribuido como un riego que cubre 67 de 100 parcelas."
+            },
+            {
+                id: 21,
+                module: 2,
+                text: "Al descomponer el índice de Theil nacional de Guatemala ($T = 0.405$, ENEIC I-2026) entre los tres dominios (Metropolitano, Resto Urbano y Rural), ¿qué porcentaje de la desigualdad total se produce DENTRO de los dominios?",
+                options: [
+                    "Apenas el 15.3%",
+                    "Exactamente el 50.0%",
+                    "El 84.7% (aproximadamente 85 de cada 100)",
+                    "El 99.9%"
+                ],
+                correct: 2,
+                explanation: "$T_{\\text{dentro}} = 0.343$ y $T_{\\text{entre}} = 0.062$. Por ende, $0.343 / 0.405 = 84.7\\%$. La abrumadora mayoría de la desigualdad ocurre entre vecinos del mismo dominio geográfico."
+            },
+            {
+                id: 22,
+                module: 2,
+                text: "Si mediante una política macroeconómica perfecta se lograra que el ingreso per cápita promedio del campo y de la ciudad fuera exactamente igual en Guatemala, ¿cuánta de la desigualdad nacional desaparecería?",
+                options: [
+                    "Casi toda (más del 80%)",
+                    "Cerca de la mitad (50%)",
+                    "Menos de una cuarta parte (solo el 15.3%)",
+                    "Ninguna, porque Theil no cambia con el ingreso"
+                ],
+                correct: 2,
+                explanation: "Como la desigualdad 'entre dominios' solo representa 0.062 (el 15.3% del total), igualar los promedios territoriales dejaría intacto el 84.7% de la desigualdad existente entre los propios vecinos."
+            },
+            {
+                id: 23,
+                module: 2,
+                text: "En el ejemplo gerencial de las tiendas de ventas, ¿qué decisión procede si el Theil demuestra que la desigualdad está concentrada ENTRE sucursales y no dentro de ellas?",
+                options: [
+                    "Despedir o capacitar a los cajeros individuales",
+                    "Revisar o cambiar la ubicación, el formato o la logística de la sucursal deficitaria",
+                    "Aumentar el precio de los productos en todas las sucursales",
+                    "Cambiar el horario de almuerzo de los vendedores"
+                ],
+                correct: 1,
+                explanation: "Si el componente 'entre' domina, el problema es estructural de la tienda (localización, mercado local); si dominara 'dentro', el problema radicaría en vendedores o incentivos individuales."
+            },
+            {
+                id: 24,
+                module: 2,
+                text: "Dos aldeas tienen un coeficiente de Gini idéntico de 0.438. Sin embargo, en la Aldea 1 un solo individuo se separa de la masa, mientras que en la Aldea 2 la población está partida en dos grupos polares. ¿Qué ocurre con el Theil?",
+                options: [
+                    "El Theil obligatoriamente debe ser igual a 0.438 en ambas aldeas",
+                    "Theil adopta valores diferentes (0.345 en la primera y 0.428 en la segunda), revelando que no reparten el ingreso de la misma forma",
+                    "Theil se vuelve negativo en la Aldea 2",
+                    "Theil no puede calcularse cuando hay polarización bimodal"
+                ],
+                correct: 1,
+                explanation: "Las curvas de Lorenz pueden cruzarse encerrando la misma área (mismo Gini), pero Theil evalúa las distancias logarítmicas de cada persona hacia su parte justa, penalizando con 0.428 a la estructura polarizada."
+            },
+            {
+                id: 25,
+                module: 2,
+                text: "En la fórmula de Theil, ¿por qué se utiliza el logaritmo natural ($\ln$) de la razón entre lo recibido y la cuota justa?",
+                options: [
+                    "Para transformar números positivos en negativos arbitrariamente",
+                    "Porque mide las brechas en proporciones relativas: recibir el doble (+0.693) pesa lo mismo en magnitud que recibir la mitad (-0.693)",
+                    "Para evitar tener que sumar decimales en hojas de cálculo",
+                    "Porque las computadoras no calculan divisiones directas"
+                ],
+                correct: 1,
+                explanation: "La función logarítmica otorga simetría porcentual a las distancias: el factor 2x y el factor 0.5x tienen la misma distancia absoluta ($|\\pm 0.693|$), reflejando la teoría de la información."
+            },
+            {
+                id: 26,
+                module: 2,
+                text: "¿Por qué en el cálculo de Theil cada distancia logarítmica $\ln(y_i / \\mu)$ se multiplica por la cuota de ingreso $s_i$ del individuo?",
+                options: [
+                    "Para que los quetzales de las personas de altos ingresos no cuenten",
+                    "Para ponderar de modo que cada quetzal del ingreso nacional cuente por igual en la medición de la dispersión agregada",
+                    "Porque de lo contrario la suma de Theil daría infinito",
+                    "Para igualar la fórmula matemática a la del coeficiente de Gini"
+                ],
+                correct: 1,
+                explanation: "Ponderar por $s_i$ garantiza que las desviaciones de quienes concentran grandes masas del ingreso total tengan un peso proporcional al volumen monetario que manejan."
+            },
+            {
+                id: 27,
+                module: 2,
+                text: "¿Qué porcentaje de la población guatemalteca reside en el dominio rural y qué porcentaje del ingreso total del país percibe según la ENEIC I-2026?",
+                options: [
+                    "El 46.1% de la población vive en el campo, pero solo se lleva el 30.8% del ingreso",
+                    "El 18.6% de la población vive en el campo y se lleva el 50% del ingreso",
+                    "El 75% de la población vive en el campo y se lleva el 75% del ingreso",
+                    "El 35.3% de la población vive en el campo y percibe el 10% del ingreso"
+                ],
+                correct: 0,
+                explanation: "Casi la mitad del país vive en el área rural (46.1%), pero apenas reciben menos de un tercio del ingreso total (30.8%), lo que refleja la disparidad territorial horizontal."
+            },
+            {
+                id: 28,
+                module: 2,
+                text: "En el área metropolitana de Guatemala, ¿cuál es el ingreso medio per cápita mensual según la ENEIC I-2026 y cuánto supera al promedio rural?",
+                options: [
+                    "Q1,061.4 en la capital; supera al rural en 1.1 veces",
+                    "Q2,603.9 en la capital; supera al ingreso per cápita rural (Q1,061.4) en casi 2.5 veces",
+                    "Q5,000 en la capital; supera al rural en 10 veces",
+                    "Q1,589.9 en la capital; es idéntico al promedio rural"
+                ],
+                correct: 1,
+                explanation: "El dominio metropolitano promedia Q2,603.9 mensuales por persona, frente a Q1,061.4 en el dominio rural (una relación de casi 2.5 a 1)."
+            },
+            {
+                id: 29,
+                module: 2,
+                text: "¿Por qué no se debe afirmar que 'Theil muestra menor desigualdad que Gini' al comparar el 0.405 de Theil con el 0.475 de Gini de Guatemala?",
+                options: [
+                    "Porque uno se mide en dólares y el otro en quetzales",
+                    "Porque operan en escalas matemáticas totalmente distintas (Gini tiene tope en 1.0; Theil no tiene techo en 1.0)",
+                    "Porque Theil solo mide desigualdad de género",
+                    "Porque la afirmación es correcta y Theil siempre es menor"
+                ],
+                correct: 1,
+                explanation: "Son métricas construidas con algoritmos distintos. Gini acota entre 0 y 1 comparando pares de personas; Theil compara contra la media y su máximo depende de $\\ln(N)$."
+            },
+            {
+                id: 30,
+                module: 2,
+                text: "En un proyecto de ingeniería ambiental sobre abastecimiento de agua en tres aldeas de un municipio, Theil indica que la mayor desigualdad está DENTRO de cada aldea. ¿Qué obra prioriza?",
+                options: [
+                    "Construir una mega-represa en la aldea vecina para traspasar caudales",
+                    "Extender la red intradomiciliaria de tuberías y conexiones en cada aldea para conectar a las familias excluidas",
+                    "Perforar un pozo adicional únicamente en la cabecera departamental",
+                    "Suspender el proyecto por falta de demanda de agua"
+                ],
+                correct: 1,
+                explanation: "Si el componente 'dentro' es alto, hay hogares con agua y hogares sin agua en la misma aldea; la solución es capilar: extender la red y las conexiones domiciliarias internas."
+            },
+            {
+                id: 31,
+                module: 2,
+                text: "En la analogía del sistema de agua potable presentada en clase, la diferencia conceptual entre Gini y Theil se resume en:",
+                options: [
+                    "Gini es la presión en la tubería; Theil es la temperatura del agua",
+                    "Gini funciona como el medidor general (cuánta agua se pierde en total); Theil funciona como el mapa de fugas (dónde y en qué tramo se pierde)",
+                    "Theil solo mide agua de lluvia; Gini mide agua subterránea",
+                    "No tienen ninguna relación con sistemas de distribución física"
+                ],
+                correct: 1,
+                explanation: "El Gini da un resumen escalar del total; Theil permite desglosar la pérdida por sectores específicos (entre sectores o dentro de cada sector)."
+            },
+            {
+                id: 32,
+                module: 2,
+                text: "¿Cómo se calcula la ponderación del grupo $g$ ($s_g$) en el componente de Theil entre dominios?",
+                options: [
+                    "Dividiendo el número de hogares entre 100",
+                    "Multiplicando la proporción de población del grupo por la razón entre el ingreso medio del grupo y el ingreso medio nacional: $(\\% \\text{Pob}_g) \\times (\\mu_g / \\mu)$",
+                    "Elevando al cuadrado el coeficiente de Gini del departamento",
+                    "Sumando los ingresos de las 4 personas más ricas de cada municipio"
+                ],
+                correct: 1,
+                explanation: "$s_g$ es la porción de la masa de ingreso nacional que capta el grupo, calculada como $P_g \\times (\\mu_g / \\mu)$."
+            },
+
+            // --- MÓDULO 3: INGRESO DE HOGARES Y ENEIC (33-48) ---
+            {
+                id: 33,
+                module: 3,
+                text: "Según los microdatos oficiales de la ENEIC I trimestre 2026 presentados en clase, ¿a cuánto asciende el ingreso laboral medio y la mediana de las personas ocupadas en Guatemala?",
+                options: [
+                    "Promedio: Q5,500; Mediana: Q4,800",
+                    "Promedio: Q2,797 al mes; Mediana: Q2,400 al mes",
+                    "Promedio: Q1,200 al mes; Mediana: Q800 al mes",
+                    "Promedio: Q3,384 al mes; Mediana: Q3,384 al mes"
+                ],
+                correct: 1,
+                explanation: "El ingreso laboral oficial INE (B1, trabajo principal) arroja un promedio mensual de Q2,797, mientras que la mediana es de Q2,400 (el 50% de los ocupados gana menos de esa cifra)."
+            },
+            {
+                id: 34,
+                module: 3,
+                text: "Al construir el ingreso total del hogar guatemalteco, ¿qué componentes integran el bloque B1 del INE?",
+                options: [
+                    "Horas extra, bono 14 y aguinaldo exclusivamente",
+                    "Salario del trabajo principal + ganancia neta de negocio propio + ganancia neta de cosechas y animales del trabajo principal",
+                    "Remesas internacionales enviadas por familiares en el extranjero",
+                    "Alquileres imputados de la vivienda propia y herencias"
+                ],
+                correct: 1,
+                explanation: "La variable oficial YLAB_PUBLI (B1) suma estrictamente el salario base de empleados, ganancia de patronos/cuenta propia y excedente agropecuario del empleo principal."
+            },
+            {
+                id: 35,
+                module: 3,
+                text: "¿Cuánto incrementa el ingreso disponible promedio del hogar cuando se suman los bloques no oficiales (B2, B3, B4 y B5) sobre el salario básico B1?",
+                options: [
+                    "Aumenta un 5%",
+                    "Aumenta un 37.2% (pasando de Q4,715.2 a Q6,470.2 al mes por hogar)",
+                    "Se duplica exactamente (+100%)",
+                    "Disminuye debido al pago de impuestos sobre la renta"
+                ],
+                correct: 1,
+                explanation: "El agregado de complementos laborales (B2), pluriempleo (B3), rentas/pensiones (B4) y remesas (B5) eleva el promedio de Q4,715 a Q6,470 (+37.2%)."
+            },
+            {
+                id: 36,
+                module: 3,
+                text: "En la homologación temporal de ingresos para calcular el ingreso mensual de un hogar, ¿cómo se estandariza el Bono 14 o aguinaldo recibido en los últimos 12 meses?",
+                options: [
+                    "Se divide entre 3",
+                    "Se suma íntegro al mes corriente sin prorrateo",
+                    "Se divide entre 12 para obtener su flujo equivalente mensual",
+                    "Se multiplica por el factor de expansión de la encuesta"
+                ],
+                correct: 2,
+                explanation: "Siguiendo la regla de balances de masa económica, los ingresos con periodicidad anual (últimos 12 meses) se dividen entre 12 para convertirlos en quetzales por mes."
+            },
+            {
+                id: 37,
+                module: 3,
+                text: "¿Por qué se excluyen deliberadamente las indemnizaciones laborales y el pago a empleados domésticos residentes de la frontera del ingreso corriente del hogar?",
+                options: [
+                    "Porque las computadoras del INE no admiten más de 5 dígitos",
+                    "Las indemnizaciones son cobros de capital extraordinario (no flujo regular) y los trabajadores domésticos no son miembros consanguíneos o dependientes del hogar",
+                    "Porque son ingresos gravados con tasa cero en el régimen tributario",
+                    "Porque solo se registran en los censos de población cada 20 años"
+                ],
+                correct: 1,
+                explanation: "La teoría del ingreso permanente excluye pagos extraordinarios no recurrentes; el servicio doméstico percibe un salario que forma parte de su propio hogar de origen."
+            },
+            {
+                id: 38,
+                module: 3,
+                text: "Al dividir el ingreso per cápita total entre las 18.2 millones de personas representadas por la ENEIC I-2026, ¿cuál es el ingreso promedio mensual y diario por persona?",
+                options: [
+                    "Q3,500 mensuales (Q116.6 diarios)",
+                    "Q1,589.9 mensuales (aproximadamente Q53.0 quetzales diarios por persona)",
+                    "Q500 mensuales (Q16.6 diarios)",
+                    "Q850 mensuales (Q28.3 diarios)"
+                ],
+                correct: 1,
+                explanation: "Dividiendo el ingreso del hogar entre el número de miembros, el promedio nacional per cápita es de Q1,589.9 al mes, lo que equivale a apenas Q53 diarios por persona."
+            },
+            {
+                id: 39,
+                module: 3,
+                text: "¿Qué porcentaje del ingreso nacional total capta el 10% más rico (decil 10) frente al 40% más pobre (deciles 1 al 4) en Guatemala?",
+                options: [
+                    "El decil 10 capta 10% y el 40% más pobre capta 40%",
+                    "El decil 10 capta el 34.5%, mientras que todo el 40% más pobre junto solo recibe el 12.1%",
+                    "El decil 10 capta el 75.0% y los primeros 4 deciles reciben el 25%",
+                    "El decil 10 capta el 51.7% y los primeros deciles reciben el 1.0%"
+                ],
+                correct: 1,
+                explanation: "En la distribución por deciles (ENEIC I-2026), el decil más adinerado se apropia de más de un tercio del ingreso total (34.5%), triplicando a los primeros cuatro deciles (12.1%)."
+            },
+            {
+                id: 40,
+                module: 3,
+                text: "La Razón de Palma para Guatemala con datos de la ENEIC I-2026 se sitúa en 2.86. ¿Cuál es la interpretación económica correcta de este coeficiente?",
+                options: [
+                    "Que la economía creció un 2.86% por encima de la inflación anual",
+                    "Que el 10% más rico recibe 2.86 veces más ingreso que todo el 40% más pobre del país sumado",
+                    "Que por cada quetzal que gana un hombre, una mujer recibe 2.86 centavos",
+                    "Que el quintil 5 gana 2.86 veces lo del quintil 4"
+                ],
+                correct: 1,
+                explanation: "$\\text{Palma} = D_{10} / (D_1 + D_2 + D_3 + D_4) = 34.5\\% / 12.1\\% = 2.86$. Con perfecta igualdad esta razón sería $10\\% / 40\\% = 0.25$."
+            },
+            {
+                id: 41,
+                module: 3,
+                text: "¿Cuántas veces es mayor el ingreso per cápita medio mensual del decil 10 respecto al decil 1 en Guatemala (ENEIC I-2026)?",
+                options: [
+                    "3.5 veces",
+                    "15.1 veces",
+                    "35.9 veces",
+                    "100.0 veces"
+                ],
+                correct: 2,
+                explanation: "La relación extrema $D_{10} / D_1$ muestra que una persona del estrato más rico ingresa en promedio 35.9 veces lo que ingresa una persona del 10% más pobre."
+            },
+            {
+                id: 42,
+                module: 3,
+                text: "Al analizar la relación entre crecimiento del PIB y salarios reales en Guatemala entre 2000 y 2017, la evidencia empírica muestra que:",
+                options: [
+                    "Los salarios reales crecieron al mismo ritmo que la economía (+60%)",
+                    "Mientras el PIB real acumuló un alza superior al 60% (+3.5% anual), los salarios reales cayeron un 18%",
+                    "La participación de los trabajadores en el PIB alcanzó niveles récord del 80%",
+                    "Las ganancias de las empresas disminuyeron un 25%"
+                ],
+                correct: 1,
+                explanation: "La presentación demuestra el divorcio entre crecimiento macroeconómico y bienestar salarial: el PIB aumentó de forma sostenida mientras el poder adquisitivo del salario se deterioró un 18%."
+            },
+            {
+                id: 43,
+                module: 3,
+                text: "¿Cuál es la diferencia conceptual entre la distribución funcional y la distribución personal del ingreso?",
+                options: [
+                    "La funcional clasifica por género y la personal por rangos de edad",
+                    "La funcional analiza qué porcentaje del PIB va a remuneraciones (R), ganancias (G) e impuestos; la personal analiza cuánto reciben personas u hogares individuales (deciles/Gini)",
+                    "La funcional solo aplica a las empresas del Estado y la personal a cooperativas",
+                    "No existe distinción teórica según el Sistema de Cuentas Nacionales"
+                ],
+                correct: 1,
+                explanation: "Distribución funcional: reparto del PIB entre factores de producción (trabajo vs capital). Distribución personal: reparto monetario efectivo entre familias e individuos."
+            },
+            {
+                id: 44,
+                module: 3,
+                text: "En términos de la teoría macroeconómica del ingreso y la riqueza:",
+                options: [
+                    "El ingreso es un stock acumulado a una fecha y la riqueza un flujo periódico",
+                    "El ingreso es un flujo por unidad de tiempo (como el caudal m³/s) y la riqueza es un stock de activos acumulados (como el volumen del embalse m³)",
+                    "Ambos conceptos representan flujos transaccionales bancarios",
+                    "La ENEIC mide directamente el stock de riqueza física de las familias guatemaltecas"
+                ],
+                correct: 1,
+                explanation: "El ingreso entra periódicamente (flujo); la riqueza es el patrimonio consolidado a un momento dado (stock). La riqueza genera ingresos (rentas) y el ahorro genera nueva riqueza."
+            },
+            {
+                id: 45,
+                module: 3,
+                text: "¿Por qué el coeficiente de Gini reportado por la ENCOVI 2023 (0.421) resulta numéricamente menor que el estimado con la ENEIC I-2026 (0.475)?",
+                options: [
+                    "Porque la ENCOVI solo se levantó en la Ciudad de Guatemala",
+                    "Porque la ENCOVI mide la desigualdad del consumo (que es más estable y se declara mejor), mientras que la ENEIC mide ingreso (que fluctúa más y es más concentrado)",
+                    "Porque hubo una devaluación drástica del quetzal en 2024",
+                    "Porque la fórmula de Gini cambió por decreto legislativo"
+                ],
+                correct: 1,
+                explanation: "El consumo suele suavizarse a lo largo del tiempo (por endeudamiento, ahorro o autoconsumo), por lo que las mediciones basadas en gasto presentan menor desigualdad que las basadas en ingreso corriente."
+            },
+            {
+                id: 46,
+                module: 3,
+                text: "¿Qué impacto distributivo tienen las transferencias no laborales (B4) y las remesas familiares (B5) sobre el coeficiente de Gini de los hogares en Guatemala?",
+                options: [
+                    "Hacen que la desigualdad aumente por encima de 0.600",
+                    "Hacen que el Gini disminuya de 0.500 (solo con ingresos laborales B1-B3) a 0.475, demostrando un efecto desconcentrador o redistributivo hacia estratos vulnerables",
+                    "No alteran en absoluto la curva de Lorenz",
+                    "Afectan únicamente a las familias del decil 10 metropolitano"
+                ],
+                correct: 1,
+                explanation: "Al sumar remesas y apoyos sociales, la desigualdad global disminuye: estos recursos llegan masivamente a familias en áreas rurales y estratos de menor ingreso salarial formal."
+            },
+            {
+                id: 47,
+                module: 3,
+                text: "En una Curva de Lorenz, ¿qué representa geométricamente el coeficiente de Gini?",
+                options: [
+                    "La pendiente de la curva en el percentil 50",
+                    "La razón entre el área de concentración A (entre la diagonal y la curva) y el área total del triángulo bajo la diagonal (0.5), es decir: Gini = A / 0.5",
+                    "La distancia máxima en quetzales entre el decil 1 y el decil 10",
+                    "El logaritmo natural del promedio poblacional"
+                ],
+                correct: 1,
+                explanation: "Gini mide qué fracción del triángulo de perfecta igualdad representa el área encerrada entre la línea de 45° y la trayectoria acumulativa del ingreso ($G = A / 0.5 = 1 - 2B$)."
+            },
+            {
+                id: 48,
+                module: 3,
+                text: "¿Cuánto percibe en promedio un hogar del quintil 1 (el 20% más vulnerable) mensualmente por persona según los quintiles de la ENEIC I-2026?",
+                options: [
+                    "Q271.4 al mes (menos de Q10 quetzales diarios)",
+                    "Q1,763.6 al mes",
+                    "Q2,400.0 al mes",
+                    "Q4,106.3 al mes"
+                ],
+                correct: 0,
+                explanation: "El quintil 1 solo capta el 3.4% del ingreso nacional total, con una media per cápita de Q271.4 al mes, frente a los Q4,106.3 del quintil 5 (una brecha de 15.1 veces)."
+            },
+
+            // --- MÓDULO 4: POBREZA MULTIDIMENSIONAL IPM-GT (49-64) ---
+            {
+                id: 49,
+                module: 4,
+                text: "¿Cuáles son las 5 dimensiones constitutivas del Índice de Pobreza Multidimensional de Guatemala (IPM-Gt, ENCOVI 2023) y cuánto pesa cada una en el índice?",
+                options: [
+                    "Ingreso, Salario, Consumo, Ahorro e Inversión (20% cada una)",
+                    "Salud y Seguridad Alimentaria, Educación, Empleo Digno, Vivienda y Servicios Básicos (20% de peso relativo cada una)",
+                    "Vivienda, Transporte, Comunicaciones, Recreación y Vestuario (20% cada una)",
+                    "Nutrición, Telefonía móvil, Agua, Electricidad y Combustible (20% cada una)"
+                ],
+                correct: 1,
+                explanation: "El diseño normativo del IPM-Gt asigna exactamente el mismo peso (20%) a las 5 dimensiones del bienestar evaluadas."
+            },
+            {
+                id: 50,
+                module: 4,
+                text: "En la metodología Alkire-Foster aplicada en Guatemala, ¿cuál es el umbral de corte de pobreza ($k$) establecido para considerar a un hogar como multidimensionalmente pobre?",
+                options: [
+                    "k = 10% (al menos 1 indicador privado)",
+                    "k = 30% (equivalente a acumular privaciones que sumen el 30% del total ponderado, o una dimensión y media)",
+                    "k = 50% (mitad de los indicadores)",
+                    "k = 75% (pobreza extrema solamente)"
+                ],
+                correct: 1,
+                explanation: "La línea de pobreza multidimensional se fijó en $k = 30\\%$. Quien acumule $\\ge 30\\%$ de privaciones ponderadas entra en la categoría de pobre multidimensional."
+            },
+            {
+                id: 51,
+                module: 4,
+                text: "¿A cuánto ascendió la incidencia ($H$), la intensidad ($A$) y el índice ajustado ($M_0$) del IPM-Gt en la medición oficial de la ENCOVI 2023?",
+                options: [
+                    "H = 25.3%, A = 20.0%, M0 = 0.050",
+                    "H = 57.7%, A = 45.1%, M0 = 0.260",
+                    "H = 75.6%, A = 60.0%, M0 = 0.453",
+                    "H = 45.3%, A = 33.3%, M0 = 0.151"
+                ],
+                correct: 1,
+                explanation: "El 57.7% de los guatemaltecos sufre pobreza multidimensional ($H$). Entre ellos, la intensidad promedio de carencias es del 45.1% ($A$). El índice $M_0 = H \\times A = 0.577 \\times 0.451 = 0.260$."
+            },
+            {
+                id: 52,
+                module: 4,
+                text: "De los 17 indicadores evaluados en el IPM-Gt 2023, ¿cuál es el que realiza la MAYOR contribución porcentual individual al valor total del índice?",
+                options: [
+                    "Embarazo en adolescentes (1.2%)",
+                    "Empleo informal (19.3% de contribución relativa)",
+                    "Cuidado infantil (0.4%)",
+                    "Falta de energía eléctrica (3.0%)"
+                ],
+                correct: 1,
+                explanation: "El empleo informal (peso propio del 10%) aporta el 19.3% de todo el IPM-Gt nacional debido a que el 74% de la población del país se encuentra privada en este aspecto laboral."
+            },
+            {
+                id: 53,
+                module: 4,
+                text: "¿Cuál es el indicador que presenta la MENOR tasa de privación no censurada (menos extendido a nivel nacional) en el IPM-Gt 2023?",
+                options: [
+                    "Cuidado infantil inadecuado (0.4%)",
+                    "Años de escolaridad en adultos (73.9%)",
+                    "Recolección de basura (65%)",
+                    "Saneamiento mejorado (40%)"
+                ],
+                correct: 0,
+                explanation: "El cuidado infantil (niños menores de 2 años solos o en el lugar de trabajo del padre/madre) reporta apenas un 0.4% de privación no censurada y 0.3% censurada."
+            },
+            {
+                id: 54,
+                module: 4,
+                text: "Al analizar la brecha urbano-rural en el IPM-Gt 2023, ¿cuál es la incidencia de pobreza multidimensional en el área rural frente a la urbana?",
+                options: [
+                    "Rural: 40.8%; Urbana: 76.3%",
+                    "Rural: 76.3%; Urbana: 40.8% (casi el doble en el área rural)",
+                    "Ambas áreas presentan exactamente 57.7%",
+                    "Rural: 95.0%; Urbana: 10.0%"
+                ],
+                correct: 1,
+                explanation: "En el campo guatemalteco, más de 3 de cada 4 personas (76.3%) viven en pobreza multidimensional, frente al 40.8% en el área urbana."
+            },
+            {
+                id: 55,
+                module: 4,
+                text: "¿Cuál es la tasa de incidencia de pobreza multidimensional registrada en la población Maya frente a la población Ladina/Mestiza según la ENCOVI 2023?",
+                options: [
+                    "Maya: 46.1%; Ladina: 75.6%",
+                    "Maya: 75.6%; Ladina: 46.1% (una brecha de 1.6 veces mayor)",
+                    "Maya: 99.0%; Ladina: 5.0%",
+                    "Ambos grupos presentan idéntica tasa de 50.3%"
+                ],
+                correct: 1,
+                explanation: "Tres de cada cuatro personas mayas (75.6%) son pobres multidimensionales, comparado con el 46.1% de la población ladina o mestiza."
+            },
+            {
+                id: 56,
+                module: 4,
+                text: "¿Qué departamento registró la MAYOR y cuál la MENOR incidencia de pobreza multidimensional en el informe oficial ENCOVI 2023?",
+                options: [
+                    "Mayor: Petén (90%); Menor: Escuintla (15%)",
+                    "Mayor: Alta Verapaz (87.2%); Menor: Sacatepéquez (25.3%)",
+                    "Mayor: Guatemala (57%); Menor: Quiché (20%)",
+                    "Mayor: Chiquimula (80%); Menor: Izabal (30%)"
+                ],
+                correct: 1,
+                explanation: "Sacatepéquez tiene la incidencia más baja con 25.3%, mientras que Alta Verapaz encabeza la privación nacional con un alarmante 87.2%."
+            },
+            {
+                id: 57,
+                module: 4,
+                text: "A pesar de que el departamento de Guatemala tiene una baja tasa porcentual de incidencia (Región Metropolitana: 25.9%), ¿por qué alberga el mayor número absoluto de personas pobres?",
+                options: [
+                    "Por un sesgo en la recolección de boletas censales",
+                    "Por el elevado volumen y densidad poblacional del departamento, lo que concentra a más individuos en cifras absolutas que en áreas rurales dispersas",
+                    "Porque todos los inmigrantes extranjeros residen allí",
+                    "Porque el costo de la canasta básica es el menor de la república"
+                ],
+                correct: 1,
+                explanation: "Al concentrar casi el 20% de los habitantes del país, una tasa del 25.9% representa numéricamente más individuos en pobreza que un departamento pequeño con 80% de incidencia."
+            },
+            {
+                id: 58,
+                module: 4,
+                text: "¿Qué resultado arrojó la comparación de la pobreza multidimensional por jefatura del hogar en la ENCOVI 2023?",
+                options: [
+                    "Los hogares con jefatura femenina tienen el doble de pobreza que los masculinos",
+                    "Los hogares con jefatura masculina presentan mayor incidencia (60.1%) e intensidad (45.4%) que los de jefatura femenina (50.3% y 43.8%)",
+                    "No se identificaron jefaturas femeninas en la muestra del INE",
+                    "Ambos tipos de jefatura presentan exactamente un 57.7%"
+                ],
+                correct: 1,
+                explanation: "El informe constató que los hogares con jefatura masculina presentan mayores tasas de pobreza multidimensional, explicadas en parte por mayor empleo informal y menor escolaridad en zonas rurales."
+            },
+            {
+                id: 59,
+                module: 4,
+                text: "En el análisis de privaciones cruzadas entre pobreza monetaria de consumo e IPM-Gt, ¿qué porcentaje de la población total guatemalteca NO ES POBRE bajo ninguna de las dos metodologías?",
+                options: [
+                    "Apenas el 5.2%",
+                    "El 28.7%",
+                    "El 57.7%",
+                    "El 75.0%"
+                ],
+                correct: 1,
+                explanation: "La matriz bivariada revela que solo el 28.7% de la población está libre tanto de pobreza monetaria como de pobreza multidimensional; el 14.7% padece ambas en forma extrema."
+            },
+            {
+                id: 60,
+                module: 4,
+                text: "¿Qué ocurrió con la evolución temporal del IPM-Gt entre 2014 y 2023 según los intervalos de confianza al 95%?",
+                options: [
+                    "La incidencia nacional cayó drásticamente más de 30 puntos porcentuales",
+                    "La disminución de la incidencia (de 61.6% a 57.7%, -3.9 pp) NO fue estadísticamente significativa, aunque la intensidad sí mostró una leve reducción significativa (-3.5 pp)",
+                    "El país erradicó el empleo informal y la deserción escolar",
+                    "La pobreza multidimensional aumentó de manera explosiva a más del 85%"
+                ],
+                correct: 1,
+                explanation: "Los intervalos de confianza de la incidencia (H) entre 2014 y 2023 se sobreponen, lo que demuestra estancamiento estadístico en la reducción de personas en pobreza estructural."
+            },
+            {
+                id: 61,
+                module: 4,
+                text: "¿Cuáles fueron los tres indicadores específicos que EMPEORARON (aumentaron su privación censurada) entre 2014 y 2023 en el IPM-Gt?",
+                options: [
+                    "Empleo formal, turismo y acceso a telefonía fija",
+                    "Hacinamiento, trabajo infantil y asistencia escolar",
+                    "Atención del parto, alfabetización y drenajes pluviales",
+                    "Vacunación, exportaciones y seguridad vial"
+                ],
+                correct: 1,
+                explanation: "A pesar de la estabilidad general, el hacinamiento habitacional, el trabajo infantil y la no asistencia escolar registraron retrocesos preocupantes entre 2014 y 2023."
+            },
+            {
+                id: 62,
+                module: 4,
+                text: "De acuerdo con los hallazgos del IPM-Gt 2023, ¿cuál es la relación entre el acceso a internet y la pobreza multidimensional en los hogares?",
+                options: [
+                    "No existe ninguna relación estadística entre ambas variables",
+                    "Los hogares sin acceso a internet presentan una incidencia de pobreza 40 puntos porcentuales mayor que aquellos con conexión",
+                    "Tener internet elimina automáticamente la falta de agua y saneamiento",
+                    "El internet solo es relevante para medir el crecimiento del PIB bancario"
+                ],
+                correct: 1,
+                explanation: "La brecha digital actúa como un potente marcador de rezago: la incidencia de pobreza en hogares desconectados es 40 puntos superior a la de los conectados."
+            },
+            {
+                id: 63,
+                module: 4,
+                text: "En la dimensión de 'Vivienda' del IPM-Gt, ¿cuáles son los 3 indicadores considerados y qué peso tiene cada uno?",
+                options: [
+                    "Color de fachada, garaje y jardín (6.67% c/u)",
+                    "Materiales precarios de pared/piso, hacinamiento (>3 personas por cuarto) y combustible para cocinar (leña sin chimenea), pesando 6.66% cada uno",
+                    "Escritura pública, pago de IUSI y avalúo catastral (6.67% c/u)",
+                    "Conexión a internet, cable e iluminación led (6.67% c/u)"
+                ],
+                correct: 1,
+                explanation: "La dimensión Vivienda pesa 20% y se divide equitativamente entre sus tres componentes: materiales (6.67%), hacinamiento (6.67%) y humo tóxico por leña sin tiro (6.67%)."
+            },
+            {
+                id: 64,
+                module: 4,
+                text: "¿Por qué el enfoque de capacidades de Amartya Sen sostiene que medir el bienestar únicamente por el ingreso monetario es insuficiente?",
+                options: [
+                    "Porque las monedas sufren devaluaciones cambiarias impredecibles",
+                    "Porque el bienestar no reside en la posesión de mercancías, sino en las libertades y oportunidades sustanciales de las personas para llevar una vida valorada",
+                    "Porque ningún hogar en el mundo declara sus ingresos reales al fisco",
+                    "Porque el producto interno bruto siempre subestima el valor de la agricultura"
+                ],
+                correct: 1,
+                explanation: "Sen argumenta que el ingreso es solo un medio instrumental; la verdadera medida radica en los funcionamientos y capacidades reales (salud, educación, participación, dignidad)."
+            },
+
+            // --- MÓDULO 5: NECESIDADES BÁSICAS INSATISFECHAS NBI (65-77) ---
+            {
+                id: 65,
+                module: 5,
+                text: "De acuerdo con el Censo Nacional de Población y Vivienda 2018, ¿qué porcentaje de los hogares guatemaltecos presenta al menos una Necesidad Básica Insatisfecha (NBI)?",
+                options: [
+                    "12.5%",
+                    "25.3%",
+                    "45.3% (equivalente a 1.5 millones de familias o 6.2 millones de personas)",
+                    "88.9%"
+                ],
+                correct: 2,
+                explanation: "El 45.3% de los hogares vive en pobreza estructural NBI. En términos didácticos: casi 1 de cada 2 familias guatemaltecas enfrenta al menos una carencia crítica de infraestructura o subsistencia."
+            },
+            {
+                id: 66,
+                module: 5,
+                text: "¿Cuál es el criterio técnico utilizado en el método NBI para clasificar a un hogar en condición de 'Hacinamiento Crítico'?",
+                options: [
+                    "Cuando viven más de 2 personas por vivienda sin importar cuartos",
+                    "Cuando residen más de tres personas por cuarto habitable destinado a dormir o vivir (sin contar cocina, baños y pasillos)",
+                    "Cuando la vivienda mide menos de 100 metros cuadrados de construcción",
+                    "Cuando conviven dos familias emparentadas bajo el mismo techo"
+                ],
+                correct: 1,
+                explanation: "El umbral internacional de NBI establece que más de 3 habitantes por dormitorio/cuarto constituye hacinamiento crítico, afectando a casi 700 mil familias guatemaltecas."
+            },
+            {
+                id: 67,
+                module: 5,
+                text: "¿Cuál de los 6 indicadores del método NBI representa el mayor avance o 'éxito nacional' en Guatemala, registrando la menor privación de hogares?",
+                options: [
+                    "Abastecimiento de agua potable por tubería",
+                    "Acceso a la educación primaria en menores de 7 a 14 años (apenas 2.8% de hogares con carencia)",
+                    "Vivienda con piso de granito o cerámico",
+                    "Capacidad de subsistencia económica holgada"
+                ],
+                correct: 1,
+                explanation: "La cobertura escolar primaria para niños de 7 a 14 años alcanzó una carencia residual de solo el 2.8%, siendo el indicador con mayor éxito de cobertura pública en censos."
+            },
+            {
+                id: 68,
+                module: 5,
+                text: "¿En qué consiste la denominada 'Paradoja de Totonicapán' documentada en la presentación sobre NBI?",
+                options: [
+                    "En que es el departamento más rico pero con menor nivel educativo de la región",
+                    "En que el área urbana presenta una mayor proporción de hogares con NBI (75%) que el área rural circundante (47%)",
+                    "En que no tiene nacimientos de agua natural pero exporta agua embotellada",
+                    "En que su población no registra comercio de textiles ni artesanías"
+                ],
+                correct: 1,
+                explanation: "El rápido crecimiento poblacional del casco urbano generó una aglomeración desprovista de redes de agua, drenajes y saneamiento, creando 'campamentos urbanos' con peores NBI que las áreas rurales tradicionales."
+            },
+            {
+                id: 69,
+                module: 5,
+                text: "¿Qué grave retroceso hídrico reveló el análisis intercensal 2002-2018 a nivel municipal en Guatemala?",
+                options: [
+                    "Que se agotó la cuenca del Río Usumacinta",
+                    "Que 170 municipios del país registraron un empeoramiento en el acceso al abastecimiento de agua potable",
+                    "Que todas las municipalidades privatizaron sus servicios de fontanería",
+                    "Que la lluvia se redujo a cero en la Franja Transversal del Norte"
+                ],
+                correct: 1,
+                explanation: "Entre 2002 y 2018, en 170 municipios la proporción de hogares con agua segura cayó drásticamente debido a agotamiento de pozos, degradación de cuencas y colapso de infraestructuras."
+            },
+            {
+                id: 70,
+                module: 5,
+                text: "En el método NBI, ¿cómo se define el indicador de 'Baja Capacidad de Subsistencia' en el hogar?",
+                options: [
+                    "Si ningún miembro de la familia tiene cuenta de ahorros en un banco cooperativo",
+                    "Cuando en el hogar hay más de 3 dependientes por cada persona ocupada y el jefe o jefa de hogar no ha completado la educación primaria",
+                    "Si los ingresos mensuales no superan el valor de la Canasta Básica Alimentaria",
+                    "Cuando el hogar depende exclusivamente de subsidios del gobierno central"
+                ],
+                correct: 1,
+                explanation: "La fórmula combina vulnerabilidad demográfica (alta tasa de dependencia: $>3$ miembros por ocupado) con bajo capital humano del sostén familiar (jefe sin primaria completa)."
+            },
+            {
+                id: 71,
+                module: 5,
+                text: "En el 'Semáforo NBI', ¿cuándo se clasifica a una familia en condición de 'Pobreza Extrema Estructural'?",
+                options: [
+                    "Cuando presenta únicamente privación en el material del piso",
+                    "Cuando acumula múltiples necesidades insatisfechas críticas (generalmente 2 o más NBI, o condiciones extremas en casi todos los servicios básicos)",
+                    "Solo si su jefe de hogar se encuentra desempleado por más de 5 años",
+                    "Cuando no posee vehículo de combustión de 4 ruedas"
+                ],
+                correct: 1,
+                explanation: "La metodología NBI gradúa la intensidad: 1 NBI = Pobreza estructural simple; $\\ge 2$ NBI = Pobreza extrema estructural (carencia simultánea de vivienda, agua, saneamiento y empleo)."
+            },
+            {
+                id: 72,
+                module: 5,
+                text: "¿Cuál es el departamento con el menor y cuál con el mayor porcentaje de hogares con NBI según la 'Escalera de 22 Departamentos'?",
+                options: [
+                    "Menor: Quetzaltenango (10%); Mayor: Huehuetenango (95%)",
+                    "Menor: Departamento de Guatemala (25.3%); Mayor: Alta Verapaz (75.1%)",
+                    "Menor: Escuintla (22%); Mayor: Izabal (68%)",
+                    "Menor: Jalapa (30%); Mayor: Santa Rosa (80%)"
+                ],
+                correct: 1,
+                explanation: "El departamento de Guatemala se sitúa en la cima de la escalera relativa con 25.3% de familias con NBI, mientras Alta Verapaz ocupa el último peldaño con un 75.1%."
+            },
+            {
+                id: 73,
+                module: 5,
+                text: "En el análisis de impacto para la salud pública y nutrición, ¿por qué la falta de saneamiento y agua segura provoca desnutrición crónica infantil?",
+                options: [
+                    "Porque las familias gastan demasiado tiempo comprando refrescos embotellados",
+                    "Porque el consumo de agua contaminada y la falta de higiene generan cuadros recurrentes de diarrea y parasitismo que impiden la absorción biológica de nutrientes",
+                    "Porque el agua pura destruye las vitaminas de los granos básicos",
+                    "No existe evidencia médica de que el saneamiento afecte la desnutrición infantil"
+                ],
+                correct: 1,
+                explanation: "Sin agua potable ni saneamiento, los episodios diarreicos recurrentes alteran la mucosa intestinal de los niños (enteropatía ambiental), bloqueando la asimilación efectiva de nutrientes."
+            },
+            {
+                id: 74,
+                module: 5,
+                text: "¿Cuántas familias guatemaltecas vivían sin servicios sanitarios adecuados (inodoro o letrina funcional) según las estimaciones censales presentadas?",
+                options: [
+                    "Apenas 20,000 familias",
+                    "Más de 556,000 familias",
+                    "2.5 millones de familias",
+                    "Menos del 1% del total nacional"
+                ],
+                correct: 1,
+                explanation: "Exactamente 556,420 hogares carecen de un saneamiento digno, viéndose obligados al fecalismo al aire libre o a pozos ciegos insalubres."
+            },
+            {
+                id: 75,
+                module: 5,
+                text: "Desde la perspectiva de la auditoría y gestión de políticas sociales, ¿qué lección arroja que 140 municipios hayan reducido más de 20 puntos de NBI entre 2002 y 2018?",
+                options: [
+                    "Que la inversión focalizada y sostenida en redes de agua, pisos de cemento y aulas sí es capaz de romper trampas de pobreza estructural",
+                    "Que no es necesario dar seguimiento presupuestario a los programas públicos",
+                    "Que la pobreza se redujo espontáneamente sin intervención gubernamental ni comunitaria",
+                    "Que el método NBI sobreestima los cambios en infraestructura"
+                ],
+                correct: 0,
+                explanation: "La evidencia de los 'municipios campeones' demuestra que las políticas focalizadas en dotación de infraestructura básica logran transformaciones tangibles en plazos intercensales."
+            },
+            {
+                id: 76,
+                module: 5,
+                text: "¿Cómo interactúa la precariedad de la vivienda (piso de tierra y fogón abierto) con los objetivos ambientales y forestales del país?",
+                options: [
+                    "Las familias en viviendas precarias no utilizan leña",
+                    "La ineficiencia térmica y el uso de fogones tradicionales demandan mayor extracción de leña forestal y elevan la contaminación intradomiciliaria",
+                    "Los pisos de tierra incrementan la captación de aguas freáticas en los hogares",
+                    "Mejorar la vivienda urbana disminuye la reforestación rural"
+                ],
+                correct: 1,
+                explanation: "Las viviendas precarias con fogones rústicos son trampas de ineficiencia energética: demandan mayor tala de bosques para leña y provocan severas enfermedades respiratorias por humo tóxico."
+            },
+            {
+                id: 77,
+                module: 2,
+                text: "¿Qué implicación operativa tiene para un planificador del desarrollo que el componente 'Dentro' de Theil sea del 84.7% en Guatemala?",
+                options: [
+                    "Que basta con transferir recursos desde la capital hacia los alcaldes rurales sin focalizar",
+                    "Que las políticas sociales deben focalizar a nivel de hogares y comunidades específicas, pues dentro de cada municipio coexisten familias ricas y vulnerables",
+                    "Que se debe abandonar el cálculo del PIB departamental",
+                    "Que la desigualdad se resolverá sola mediante la libre migración campo-ciudad"
+                ],
+                correct: 1,
+                explanation: "Como el 85% de la brecha no se debe al choque metropolitano vs rural, sino a disparidades intradominio, las políticas deben identificar a los hogares específicos que se quedan atrás."
+            }
+        ];
+
+        // QUIZ STATE
+        let currentFilter = 'all';
+        let displayedQuestions = [];
+        let userAnswers = {}; // id -> selectedOptionIndex
+        let isExamMode = false;
+
+        function initQuiz() {
+            displayedQuestions = [...questionBank];
+            renderQuestions();
+            updateStats();
+        }
+
+        function applyQuizFilter() {
+            const filterVal = document.getElementById('filter-module').value;
+            currentFilter = filterVal;
+            isExamMode = false;
+            document.getElementById('exam-summary').classList.add('hidden');
+
+            if (filterVal === 'all') {
+                displayedQuestions = [...questionBank];
+            } else {
+                const modNum = parseInt(filterVal);
+                displayedQuestions = questionBank.filter(q => q.module === modNum);
+            }
+            renderQuestions();
+            updateStats();
+        }
+
+        function startPracticeMode() {
+            document.getElementById('filter-module').value = 'all';
+            applyQuizFilter();
+        }
+
+        function startExamMode(count = 20) {
+            isExamMode = true;
+            document.getElementById('exam-summary').classList.add('hidden');
+            // Shuffle and pick 20
+            const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+            displayedQuestions = shuffled.slice(0, count);
+            userAnswers = {};
+            renderQuestions();
+            updateStats();
+            // Scroll to top of questions
+            document.getElementById('questions-list').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuizState() {
+            userAnswers = {};
+            document.getElementById('exam-summary').classList.add('hidden');
+            renderQuestions();
+            updateStats();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-list');
+            container.innerHTML = '';
+
+            if (displayedQuestions.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-500 bg-white rounded-2xl">No hay preguntas disponibles con este filtro.</div>`;
+                return;
+            }
+
+            displayedQuestions.forEach((q, idx) => {
+                const answered = userAnswers.hasOwnProperty(q.id);
+                const selectedOpt = answered ? userAnswers[q.id] : null;
+
+                const qCard = document.createElement('div');
+                qCard.className = `p-5 rounded-2xl bg-white border transition-all ${answered ? 'border-slate-300' : 'border-slate-200 hover:border-slate-300'} shadow-sm space-y-4`;
+
+                // Badge
+                const moduleBadges = {
+                    1: { label: 'Módulo 1: Desigualdades Múltiples', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+                    2: { label: 'Módulo 2: Theil & Gini', color: 'bg-cyan-50 text-cyan-800 border-cyan-200' },
+                    3: { label: 'Módulo 3: Ingreso & ENEIC', color: 'bg-amber-50 text-amber-800 border-amber-200' },
+                    4: { label: 'Módulo 4: IPM-Gt (ENCOVI)', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+                    5: { label: 'Módulo 5: Necesidades Básicas (NBI)', color: 'bg-rose-50 text-rose-800 border-rose-200' }
+                };
+                const badge = moduleBadges[q.module] || { label: 'Módulo', color: 'bg-slate-100 text-slate-700' };
+
+                let html = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${badge.color}">${badge.label}</span>
+                        <span class="text-xs font-semibold text-slate-400">Pregunta ${idx + 1} de ${displayedQuestions.length}</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-slate-800 leading-snug">${q.text}</h3>
+                    <div class="space-y-2">
+                `;
+
+                // Options
+                q.options.forEach((opt, optIdx) => {
+                    let optClass = "border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700";
+                    let icon = `<span class="w-6 h-6 rounded-md bg-white border text-xs font-bold flex items-center justify-center mr-3 text-slate-600">${String.fromCharCode(65 + optIdx)}</span>`;
+
+                    if (answered) {
+                        if (optIdx === q.correct) {
+                            optClass = "border-2 border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold";
+                            icon = `<span class="w-6 h-6 rounded-md bg-emerald-600 text-white text-xs font-bold flex items-center justify-center mr-3"><i class="fa-solid fa-check"></i></span>`;
+                        } else if (optIdx === selectedOpt && selectedOpt !== q.correct) {
+                            optClass = "border-2 border-rose-600 bg-rose-50 text-rose-900 line-through opacity-80";
+                            icon = `<span class="w-6 h-6 rounded-md bg-rose-600 text-white text-xs font-bold flex items-center justify-center mr-3"><i class="fa-solid fa-xmark"></i></span>`;
+                        } else {
+                            optClass = "border border-slate-200 bg-white text-slate-400 opacity-60";
+                        }
+                    }
+
+                    const disabledAttr = answered ? "disabled" : "";
+                    html += `
+                        <button onclick="handleAnswer(${q.id}, ${optIdx})" ${disabledAttr} class="w-full text-left p-3 rounded-xl text-xs sm:text-sm flex items-center transition-all ${optClass}">
+                            ${icon}
+                            <span class="flex-1">${opt}</span>
+                        </button>
+                    `;
+                });
+
+                html += `</div>`;
+
+                // Explanation
+                if (answered) {
+                    const isCorrect = selectedOpt === q.correct;
+                    html += `
+                        <div class="mt-4 p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-rose-50 border-rose-200 text-rose-950'} text-xs space-y-1">
+                            <div class="flex items-center gap-1.5 font-bold ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}">
+                                <i class="fa-solid ${isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                                <span>${isCorrect ? '¡Respuesta Correcta!' : 'Retroalimentación Pedagógica:'}</span>
+                            </div>
+                            <p class="leading-relaxed mt-1">${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                qCard.innerHTML = html;
+                container.appendChild(qCard);
+            });
+        }
+
+        function handleAnswer(questionId, selectedIdx) {
+            userAnswers[questionId] = selectedIdx;
+            renderQuestions();
+            updateStats();
+
+            // Check if finished in exam mode
+            if (isExamMode) {
+                const totalDisplayed = displayedQuestions.length;
+                const totalAnswered = Object.keys(userAnswers).filter(k => displayedQuestions.some(q => q.id == k)).length;
+                if (totalAnswered === totalDisplayed) {
+                    showExamSummary();
+                }
+            }
+        }
+
+        function updateStats() {
+            const answeredIds = Object.keys(userAnswers);
+            const totalAnswered = answeredIds.length;
+            let correctCount = 0;
+
+            answeredIds.forEach(id => {
+                const q = questionBank.find(item => item.id == id);
+                if (q && userAnswers[id] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const incorrectCount = totalAnswered - correctCount;
+            const precision = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+            document.getElementById('stat-answered').innerText = `${totalAnswered} / ${questionBank.length}`;
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-incorrect').innerText = incorrectCount;
+            document.getElementById('stat-precision').innerText = `${precision}%`;
+        }
+
+        function showExamSummary() {
+            let correct = 0;
+            displayedQuestions.forEach(q => {
+                if (userAnswers[q.id] === q.correct) correct++;
+            });
+            const pct = Math.round((correct / displayedQuestions.length) * 100);
+            const summaryDiv = document.getElementById('exam-summary');
+            const summaryText = document.getElementById('summary-text');
+
+            summaryText.innerHTML = `Has completado el examen de <strong>${displayedQuestions.length} preguntas</strong> con <strong>${correct} aciertos</strong> (${pct}% de aprobación). Tu dominio analítico de la evidencia empírica de Guatemala ha sido registrado.`;
+            summaryDiv.classList.remove('hidden');
+            summaryDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        // =========================================================================
+        // SIMULADOR 1: THEIL Y RIEGO DE PARCELAS
+        // =========================================================================
+        const theilPresets = {
+            diapo: [500, 1000, 1500, 5000],
+            bimodal: [300, 300, 3500, 3900],
+            perfect: [2000, 2000, 2000, 2000]
+        };
+
+        function loadTheilPreset() {
+            const preset = document.getElementById('theil-preset').value;
+            if (preset !== 'custom' && theilPresets[preset]) {
+                const vals = theilPresets[preset];
+                document.getElementById('th-val-1').value = vals[0];
+                document.getElementById('th-val-2').value = vals[1];
+                document.getElementById('th-val-3').value = vals[2];
+                document.getElementById('th-val-4').value = vals[3];
+                calculateTheilLive();
+            }
+        }
+
+        function calculateTheilLive() {
+            const y1 = parseFloat(document.getElementById('th-val-1').value) || 0;
+            const y2 = parseFloat(document.getElementById('th-val-2').value) || 0;
+            const y3 = parseFloat(document.getElementById('th-val-3').value) || 0;
+            const y4 = parseFloat(document.getElementById('th-val-4').value) || 0;
+
+            const incomes = [y1, y2, y3, y4];
+            const N = incomes.length;
+            const fairShare = 1 / N; // 0.25
+            const totalIncome = incomes.reduce((acc, curr) => acc + curr, 0);
+
+            const tbody = document.getElementById('theil-table-body');
+            tbody.innerHTML = '';
+
+            if (totalIncome <= 0) {
+                document.getElementById('theil-result-val').innerText = "0.000";
+                document.getElementById('theil-irrigation-val').innerText = "100 %";
+                return;
+            }
+
+            let theilSum = 0;
+            const labels = ['A', 'B', 'C', 'D'];
+
+            incomes.forEach((inc, i) => {
+                const s_i = inc / totalIncome;
+                const ratio = s_i / fairShare;
+                const lnRatio = ratio > 0 ? Math.log(ratio) : 0;
+                const weighted = s_i * lnRatio;
+                theilSum += weighted;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2.5 font-bold text-slate-700">Persona ${labels[i]}</td>
+                    <td class="p-2.5 text-slate-600">Q ${inc.toLocaleString()}</td>
+                    <td class="p-2.5 text-slate-600">${(s_i * 100).toFixed(2)}%</td>
+                    <td class="p-2.5 font-mono text-slate-600">${ratio.toFixed(3)}</td>
+                    <td class="p-2.5 font-mono ${lnRatio >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${lnRatio >= 0 ? '+' : ''}${lnRatio.toFixed(3)}</td>
+                    <td class="p-2.5 font-bold font-mono text-brand-900">${weighted >= 0 ? '+' : ''}${weighted.toFixed(3)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const finalTheil = Math.max(0, theilSum);
+            const irrigatedRatio = Math.exp(-finalTheil);
+            const irrigatedPct = Math.round(irrigatedRatio * 100);
+            const maxTheil = Math.log(N); // 1.3863
+            const pctOfMax = Math.round((finalTheil / maxTheil) * 100);
+
+            document.getElementById('theil-result-val').innerText = finalTheil.toFixed(3);
+            document.getElementById('theil-irrigation-val').innerText = `${irrigatedPct} %`;
+            document.getElementById('theil-pct-max').innerText = `${Math.min(100, pctOfMax)} %`;
+        }
+
+
+        // =========================================================================
+        // SIMULADOR 2: ALKIRE-FOSTER IPM-GT
+        // =========================================================================
+        function resetIPMCheckboxes() {
+            document.querySelectorAll('.ipm-check').forEach(c => c.checked = false);
+            calcIPMLive();
+        }
+
+        function calcIPMLive() {
+            let totalWeight = 0;
+            document.querySelectorAll('.ipm-check:checked').forEach(c => {
+                totalWeight += parseFloat(c.getAttribute('data-weight')) || 0;
+            });
+
+            // Adjust rounding
+            const roundedScore = Math.min(100, Math.round(totalWeight * 10) / 10);
+            document.getElementById('ipm-score').innerText = `${roundedScore.toFixed(1)}%`;
+            document.getElementById('ipm-bar').style.width = `${roundedScore}%`;
+
+            const statusBox = document.getElementById('ipm-status-box');
+            if (roundedScore >= 30.0) {
+                statusBox.className = "p-4 rounded-xl bg-rose-600 text-white font-bold text-sm shadow animate-pulse";
+                statusBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Hogar en POBREZA MULTIDIMENSIONAL (c &ge; 30%)`;
+            } else {
+                statusBox.className = "p-4 rounded-xl bg-slate-200 text-slate-700 font-bold text-sm";
+                statusBox.innerHTML = `Hogar No Pobre Multidimensional (c &lt; 30%)`;
+            }
+        }
+
+
+        // =========================================================================
+        // SIMULADOR 3: SEMÁFORO NBI
+        // =========================================================================
+        function calcNBILive() {
+            const toggles = document.querySelectorAll('.nbi-toggle');
+            let countUnsatisfied = 0;
+            toggles.forEach(t => {
+                if (t.checked) countUnsatisfied++;
+            });
+
+            const banner = document.getElementById('nbi-result-banner');
+            const icon = document.getElementById('nbi-icon-indicator');
+            const title = document.getElementById('nbi-status-title');
+            const desc = document.getElementById('nbi-status-desc');
+
+            if (countUnsatisfied === 0) {
+                banner.className = "mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4";
+                icon.className = "w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl font-bold";
+                icon.innerHTML = `<i class="fa-solid fa-shield-halved"></i>`;
+                title.className = "font-black text-emerald-900 text-lg";
+                title.innerText = "Hogar NO POBRE Estructural";
+                desc.className = "text-xs text-emerald-700";
+                desc.innerText = "0 de 6 necesidades insatisfechas detectadas.";
+            } else if (countUnsatisfied === 1) {
+                banner.className = "mt-6 p-5 rounded-2xl bg-amber-50 border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4";
+                icon.className = "w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xl font-bold";
+                icon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+                title.className = "font-black text-amber-900 text-lg";
+                title.innerText = "Hogar en POBREZA ESTRUCTURAL (1 NBI)";
+                desc.className = "text-xs text-amber-800";
+                desc.innerText = `1 necesidad insatisfecha detectada. Clasifica como Pobre NBI según CEPAL.`;
+            } else {
+                banner.className = "mt-6 p-5 rounded-2xl bg-rose-50 border border-rose-300 flex flex-col sm:flex-row items-center justify-between gap-4";
+                icon.className = "w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl font-bold animate-bounce";
+                icon.innerHTML = `<i class="fa-solid fa-fire-burner"></i>`;
+                title.className = "font-black text-rose-900 text-lg";
+                title.innerText = `Hogar en POBREZA EXTREMA ESTRUCTURAL (${countUnsatisfied} NBI)`;
+                desc.className = "text-xs text-rose-800";
+                desc.innerText = `Acumulación crítica de carencias estructurales de infraestructura y subsistencia.`;
+            }
+        }
+
+        // INITIALIZATION ON WINDOW LOAD
+        window.onload = function() {
+            switchTab('quiz');
+            initQuiz();
+            calculateTheilLive();
+            calcIPMLive();
+            calcNBILive();
+        };
+    </script>
+</body>
+</html>
